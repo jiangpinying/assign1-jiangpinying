@@ -5,9 +5,11 @@ int soldierSoilY;
 int robotX,robotY;
 int robotSoilY;
 
-int laserX,laserY;
-int laserSpeedX;
+int laserHandX,laserHandY;
+int laserX,laserEndX;
+int laserSpeedX=2;
 int laserMoveX;
+int laserMax=40;
 
 PImage bg,groundhog,life,robot,soil,soldier;
 
@@ -24,7 +26,7 @@ void setup() {
   
   //soldier
   soldierSoilY=floor(random(2,6));
-  soldierX=floor(random(0,641));
+  soldierX=0;
   soldierY=80*soldierSoilY+40;
   
   //robot
@@ -33,15 +35,17 @@ void setup() {
   robotY=80*robotSoilY;
   
   //laser
-  laserX=robotX+65;
-  laserY=robotY+37;
+  laserHandX=robotX+25;
+  laserHandY=robotY+37;
+  
+
 }
 
 void draw() {
   
   //background
-  background(bg);
   imageMode(CORNER);
+  background(bg);
   image(soil,0,160);
   
   //life
@@ -64,15 +68,16 @@ void draw() {
   fill(253,184,19);
   ellipse(590,50,120,120);
   
+  //robot
+  image(robot,robotX,robotY);
+  
   //laser
   strokeWeight(10);
   stroke(255,0,0);
-  line(laserX+laserMoveX,laserY,laserX-40+laserMoveX,laserY);
-  laserSpeedX-=2;
-  laserMoveX=laserSpeedX%160;
-  
-  //robot
-  image(robot,robotX,robotY);
+  laserMoveX=(laserMoveX+laserSpeedX)%160;
+  laserX=min(laserHandX,laserHandX-laserMoveX);
+  laserEndX=min(laserHandX,laserX+laserMax);
+  line(laserX,laserHandY,laserEndX,laserHandY);
   
   //soldier
   imageMode(CENTER);
